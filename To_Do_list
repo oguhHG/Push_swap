@@ -1,9 +1,10 @@
 Ordre d'implémentation
 
 Phase 1 - Fondations
-Header file (push_swap.h) - Définir les structures (stack) et prototypes
-Makefile - Règles de compilation (all, clean, fclean, re, bonus)
-Stack module - Initialisation, utils et libération mémoire
+Header file (push_swap.h) - Définir les structures (stack) et prototypes X
+Makefile - Règles de compilation (all, clean, fclean, re, bonus) X
+Stack module - Initialisation, utils et libération mémoire -going
+
 Phase 2 - Parsing & Erreurs
 
 parse_args.c - Parser les arguments de la ligne de commande
@@ -11,12 +12,14 @@ validate_input.c - Valider les entiers, doublons, overflow
 error_handler.c - Gestion des erreurs (afficher "Error\n" sur stderr)
 
 Phase 3 - Opérations (11 opérations)
+
 swap.c - sa, sb, ss
 push.c - pa, pb
 rotate.c - ra, rb, rr
 reverse_rotate.c - rra, rrb, rrr
 
 Phase 4 - Algorithmes de tri
+
 compute_disorder.c - Calculer le désordre (paires inversées)
 simple_sort.c - Tri pour 2-3 éléments
 medium_sort.c - Tri pour ~5 éléments (chunk-based)
@@ -24,8 +27,10 @@ complex_sort.c - Tri pour grands nombres (radix sort recommandé)
 adaptive_sort.c - Dispatcher qui choisit le bon algo
 
 Phase 5 - Main & Dispatcher
+
 select_strategy.c - Logique de sélection d'algorithme
 main.c - Point d'entrée, orchestration
+
 Phase 6 - Bonus
 
 checker.c - Programme qui valide les opérations
