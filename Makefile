@@ -6,65 +6,56 @@
 #    By: hgrandje <hgrandje@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/20 16:43:36 by hgrandje          #+#    #+#              #
-#    Updated: 2026/01/20 16:51:22 by hgrandje         ###   ########.fr        #
+#    Updated: 2026/01/21 12:33:47 by colassin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = Push_swap.a
+NAME = push_swap
 
-CC = gcc
+CC = cc
 CFLAGS = -Wall -Wextra -Werror
-AR = ar rcs
 RM = rm -f
 
 LIBFT_DIR = ./libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
-SRCS = checker.c \
-       adaptive_sort.c \
-       complex_sort.c \
-       medium_sort.c \
-       simple_sort.c \
-       compute_disorder.c \
-       select_strategy.c \
-	   push.c \
-	   rotate.c \
-	   reverse_rotate.c \
-	   swap.c \
-	   error_handler.c \
-	   parse_args.c \
-	   validate_input.c \
-	   stack_free.c \
-	   stack_init.c \
-	   stack_utils.c \
-	   main.c
+SRCS_DIR = ./srcs
+
+SRCS =	$(SRCS_DIR)/main.c \
+		$(SRCS_DIR)/stack/stack_init.c \
+		$(SRCS_DIR)/stack/stack_utils.c \
+		$(SRCS_DIR)/stack/stack_free.c \
+		$(SRCS_DIR)/parsing/parse_args.c \
+		$(SRCS_DIR)/parsing/parse_flags.c \
+		$(SRCS_DIR)/parsing/parse_utils.c \
+		$(SRCS_DIR)/parsing/validate_input.c \
+		$(SRCS_DIR)/parsing/error_handler.c \
+		$(SRCS_DIR)/operations/swap.c \
+		$(SRCS_DIR)/operations/push.c \
+		$(SRCS_DIR)/operations/rotate.c \
+		$(SRCS_DIR)/operations/reverse_rotate.c \
+		$(SRCS_DIR)/disorder/compute_disorder.c \
+		$(SRCS_DIR)/algorithms/simple_sort.c \
+		$(SRCS_DIR)/algorithms/simple_sort_utils.c
 
 OBJS = $(SRCS:.c=.o)
 
-HEADER = push_swap.h
-
-bonus: all
+HEADER = ./includes/push_swap.h
 
 all: $(NAME)
 
-$(NAME): $(LIBFT) $(OBJS)
-	cp $(LIBFT) $(NAME)
-	$(AR) $(NAME) $(OBJS)
-
-$(LIBFT):
-	make -C $(LIBFT_DIR)
+$(NAME): $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME)
 
 %.o: %.c $(HEADER)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -I./includes -I$(LIBFT_DIR) -c $< -o $@
 
 clean:
 	$(RM) $(OBJS)
-	make -C $(LIBFT_DIR) clean
 
 fclean: clean
 	$(RM) $(NAME)
-	make -C $(LIBFT_DIR) fclean
 
 re: fclean all
 
-.PHONY: all clean fclean re bonus
+.PHONY: all clean fclean re
