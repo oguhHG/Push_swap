@@ -6,11 +6,11 @@
 /*   By: hgrandje <hgrandje@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/21 13:00:00 by hgrandje          #+#    #+#             */
-/*   Updated: 2026/01/21 13:04:39 by hgrandje         ###   ########.fr       */
+/*   Updated: 2026/01/21 15:55:27 by hgrandje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/push_swap.h"
+#include "push_swap.h"
 
 int	get_min_pos(t_stack *stack)
 {
@@ -38,18 +38,18 @@ int	get_min_pos(t_stack *stack)
 	return (min_pos);
 }
 
-void	push_min_to_b(t_stack *a, t_stack *b)
+void	push_min_to_b(t_data *data)
 {
 	int	min_pos;
 	int	size;
 
-	min_pos = get_min_pos(a);
-	size = a->size;
+	min_pos = get_min_pos(data->a);
+	size = data->a->size;
 	if (min_pos <= size / 2)
 	{
 		while (min_pos > 0)
 		{
-			ra(a);
+			op_ra(data, 1);
 			min_pos--;
 		}
 	}
@@ -57,31 +57,31 @@ void	push_min_to_b(t_stack *a, t_stack *b)
 	{
 		while (min_pos < size)
 		{
-			rra(a);
+			op_rra(data, 1);
 			min_pos++;
 		}
 	}
-	pb(a, b);
+	op_pb(data, 1);
 }
 
-void	push_all_back(t_stack *a, t_stack *b)
+void	push_all_back(t_data *data)
 {
-	while (b->size > 0)
-		pa(a, b);
+	while (data->b->size > 0)
+		op_pa(data, 1);
 }
 
-void	rotate_min_to_top(t_stack *a)
+void	rotate_min_to_top(t_data *data)
 {
 	int	min_pos;
 	int	size;
 
-	min_pos = get_min_pos(a);
-	size = a->size;
+	min_pos = get_min_pos(data->a);
+	size = data->a->size;
 	if (min_pos <= size / 2)
 	{
 		while (min_pos > 0)
 		{
-			ra(a);
+			op_ra(data, 1);
 			min_pos--;
 		}
 	}
@@ -89,8 +89,24 @@ void	rotate_min_to_top(t_stack *a)
 	{
 		while (min_pos < size)
 		{
-			rra(a);
+			op_rra(data, 1);
 			min_pos++;
 		}
 	}
+}
+
+int	stack_is_sorted(t_stack *stack)
+{
+	t_node	*current;
+
+	if (!stack || !stack->top || stack->size <= 1)
+		return (1);
+	current = stack->top;
+	while (current->next)
+	{
+		if (current->value > current->next->value)
+			return (0);
+		current = current->next;
+	}
+	return (1);
 }

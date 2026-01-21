@@ -5,39 +5,52 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: hgrandje <hgrandje@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/21 12:00:00 by hgrandje          #+#    #+#             */
-/*   Updated: 2026/01/21 11:35:18 by hgrandje         ###   ########.fr       */
+/*   Created: 2026/01/21 15:21:09 by hgrandje          #+#    #+#             */
+/*   Updated: 2026/01/21 15:21:14 by hgrandje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/push_swap.h"
+#include "push_swap.h"
 
 static void	swap(t_stack *stack)
 {
-	int	tmp;
+	int	tmp_value;
+	int	tmp_index;
 
 	if (!stack || stack->size < 2)
 		return ;
-	tmp = stack->top->value;
+	tmp_value = stack->top->value;
+	tmp_index = stack->top->index;
 	stack->top->value = stack->top->next->value;
-	stack->top->next->value = tmp;
+	stack->top->index = stack->top->next->index;
+	stack->top->next->value = tmp_value;
+	stack->top->next->index = tmp_index;
 }
 
-void	sa(t_stack *a)
+void	op_sa(t_data *data, int print)
 {
-	swap(a);
-	write(1, "sa\n", 3);
+	swap(data->a);
+	if (print)
+		write(1, "sa\n", 3);
+	data->bench.sa++;
+	data->bench.total++;
 }
 
-void	sb(t_stack *b)
+void	op_sb(t_data *data, int print)
 {
-	swap(b);
-	write(1, "sb\n", 3);
+	swap(data->b);
+	if (print)
+		write(1, "sb\n", 3);
+	data->bench.sb++;
+	data->bench.total++;
 }
 
-void	ss(t_stack *a, t_stack *b)
+void	op_ss(t_data *data, int print)
 {
-	swap(a);
-	swap(b);
-	write(1, "ss\n", 3);
+	swap(data->a);
+	swap(data->b);
+	if (print)
+		write(1, "ss\n", 3);
+	data->bench.ss++;
+	data->bench.total++;
 }

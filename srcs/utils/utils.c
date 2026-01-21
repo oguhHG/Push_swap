@@ -1,76 +1,67 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   stack_utils.c                                      :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hgrandje <hgrandje@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/21 15:15:13 by hgrandje          #+#    #+#             */
-/*   Updated: 2026/01/21 15:15:19 by hgrandje         ###   ########.fr       */
+/*   Created: 2026/01/21 15:24:00 by hgrandje          #+#    #+#             */
+/*   Updated: 2026/01/21 15:24:05 by hgrandje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-int	stack_is_empty(t_stack *stack)
-{
-	if (!stack || stack->size == 0)
-		return (1);
-	return (0);
-}
-
-t_node	*stack_peek(t_stack *stack)
-{
-	if (!stack)
-		return (NULL);
-	return (stack->top);
-}
-
-static int	count_smaller(t_stack *stack, int value)
+int	get_min(t_stack *stack)
 {
 	t_node	*current;
-	int		count;
+	int		min;
 
-	count = 0;
+	if (!stack || !stack->top)
+		return (0);
 	current = stack->top;
+	min = current->index;
 	while (current)
 	{
-		if (current->value < value)
-			count++;
+		if (current->index < min)
+			min = current->index;
 		current = current->next;
 	}
-	return (count);
+	return (min);
 }
 
-void	index_stack(t_stack *stack)
+int	get_max(t_stack *stack)
 {
 	t_node	*current;
+	int		max;
 
-	if (!stack)
-		return ;
+	if (!stack || !stack->top)
+		return (0);
 	current = stack->top;
+	max = current->index;
 	while (current)
 	{
-		current->index = count_smaller(stack, current->value);
+		if (current->index > max)
+			max = current->index;
 		current = current->next;
 	}
+	return (max);
 }
 
-int	get_position(t_stack *stack, int index)
+int	get_min_index(t_stack *stack)
 {
 	t_node	*current;
-	int		pos;
+	int		min_idx;
 
-	if (!stack)
-		return (-1);
-	pos = 0;
+	if (!stack || !stack->top)
+		return (0);
 	current = stack->top;
+	min_idx = current->index;
 	while (current)
 	{
-		if (current->index == index)
-			return (pos);
-		pos++;
+		if (current->index < min_idx)
+			min_idx = current->index;
 		current = current->next;
 	}
-	return (-1);
+	return (min_idx);
 }

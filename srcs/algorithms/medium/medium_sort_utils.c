@@ -1,41 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push.c                                             :+:      :+:    :+:   */
+/*   medium_sort_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hgrandje <hgrandje@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/21 15:22:26 by hgrandje          #+#    #+#             */
-/*   Updated: 2026/01/21 15:22:31 by hgrandje         ###   ########.fr       */
+/*   Created: 2026/01/21 16:40:00 by hgrandje          #+#    #+#             */
+/*   Updated: 2026/01/21 16:46:40 by hgrandje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-static void	push(t_stack *src, t_stack *dst)
+int	get_max_pos_b(t_stack *stack)
 {
-	t_node	*node;
+	t_node	*current;
+	int		max_idx;
+	int		max_pos;
+	int		pos;
 
-	if (!src || src->size == 0)
-		return ;
-	node = stack_pop(src);
-	stack_push(dst, node);
-}
-
-void	op_pa(t_data *data, int print)
-{
-	push(data->b, data->a);
-	if (print)
-		write(1, "pa\n", 3);
-	data->bench.pa++;
-	data->bench.total++;
-}
-
-void	op_pb(t_data *data, int print)
-{
-	push(data->a, data->b);
-	if (print)
-		write(1, "pb\n", 3);
-	data->bench.pb++;
-	data->bench.total++;
+	if (!stack || !stack->top)
+		return (0);
+	current = stack->top;
+	max_idx = current->index;
+	max_pos = 0;
+	pos = 0;
+	while (current)
+	{
+		if (current->index > max_idx)
+		{
+			max_idx = current->index;
+			max_pos = pos;
+		}
+		pos++;
+		current = current->next;
+	}
+	return (max_pos);
 }

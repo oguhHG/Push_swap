@@ -6,63 +6,69 @@
 /*   By: hgrandje <hgrandje@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/21 11:40:04 by colassin          #+#    #+#             */
-/*   Updated: 2026/01/21 12:32:36 by colassin         ###   ########.fr       */
+/*   Updated: 2026/01/21 16:46:40 by hgrandje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/push_swap.h"
+#include "push_swap.h"
 
-static void	sort_two(t_stack *a)
+/*
+** O(n²) - Selection Sort Algorithm
+** Also handles small stacks (2-5 elements) optimally
+*/
+
+static void	simple_sort_two(t_data *data)
 {
-	if (a->top->value > a->top->next->value)
-		sa(a);
+	if (data->a->top->index > data->a->top->next->index)
+		op_sa(data, 1);
 }
 
-static void	sort_three(t_stack *a)
+static void	simple_sort_three(t_data *data)
 {
 	int	first;
 	int	second;
 	int	third;
 
-	first = a->top->value;
-	second = a->top->next->value;
-	third = a->top->next->next->value;
+	first = data->a->top->index;
+	second = data->a->top->next->index;
+	third = data->a->top->next->next->index;
 	if (first > second && second < third && first < third)
-		sa(a);
+		op_sa(data, 1);
 	else if (first > second && second > third)
 	{
-		sa(a);
-		rra(a);
+		op_sa(data, 1);
+		op_rra(data, 1);
 	}
 	else if (first > second && second < third && first > third)
-		ra(a);
+		op_ra(data, 1);
 	else if (first < second && second > third && first < third)
-		rra(a);
-	else if (first < second && second > third && first > third)
 	{
-		sa(a);
-		ra(a);
+		op_sa(data, 1);
+		op_ra(data, 1);
 	}
+	else if (first < second && second > third && first > third)
+		op_rra(data, 1);
 }
 
-static void	sort_large(t_stack *a, t_stack *b)
+static void	simple_sort_large(t_data *data)
 {
-	while (a->size > 3)
-		push_min_to_b(a, b);
-	sort_three(a);
-	push_all_back(a, b);
+	while (data->a->size > 3)
+		push_min_to_b(data);
+	simple_sort_three(data);
+	push_all_back(data);
 }
 
-void	simple_sort(t_stack *a, t_stack *b)
+void	algo_simple(t_data *data)
 {
-	if (!a || a->size < 2)
+	if (!data || !data->a || data->a->size < 2)
 		return ;
-	if (stack_is_sorted(a))
+	if (is_sorted(data->a))
 		return ;
-	if (a->size == 2)
-		sort_two(a);
-	else if (a->size == 3)
-		sort_three(a);
+	assign_index(data->a);
+	if (data->a->size == 2)
+		simple_sort_two(data);
+	else if (data->a->size == 3)
+		simple_sort_three(data);
 	else
-		sort_large(a, b);
+		simple_sort_large(data);
 }

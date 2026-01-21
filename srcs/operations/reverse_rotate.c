@@ -5,47 +5,52 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: hgrandje <hgrandje@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/21 12:00:00 by hgrandje          #+#    #+#             */
-/*   Updated: 2026/01/21 11:34:39 by hgrandje         ###   ########.fr       */
+/*   Created: 2026/01/21 15:22:07 by hgrandje          #+#    #+#             */
+/*   Updated: 2026/01/21 15:22:13 by hgrandje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/push_swap.h"
+#include "push_swap.h"
 
 static void	reverse_rotate(t_stack *stack)
 {
-	t_node	*prev;
 	t_node	*last;
 
 	if (!stack || stack->size < 2)
 		return ;
-	prev = NULL;
-	last = stack->top;
-	while (last->next)
-	{
-		prev = last;
-		last = last->next;
-	}
-	prev->next = NULL;
+	last = stack->bottom;
+	stack->bottom = last->prev;
+	stack->bottom->next = NULL;
+	last->prev = NULL;
 	last->next = stack->top;
+	stack->top->prev = last;
 	stack->top = last;
 }
 
-void	rra(t_stack *a)
+void	op_rra(t_data *data, int print)
 {
-	reverse_rotate(a);
-	write(1, "rra\n", 4);
+	reverse_rotate(data->a);
+	if (print)
+		write(1, "rra\n", 4);
+	data->bench.rra++;
+	data->bench.total++;
 }
 
-void	rrb(t_stack *b)
+void	op_rrb(t_data *data, int print)
 {
-	reverse_rotate(b);
-	write(1, "rrb\n", 4);
+	reverse_rotate(data->b);
+	if (print)
+		write(1, "rrb\n", 4);
+	data->bench.rrb++;
+	data->bench.total++;
 }
 
-void	rrr(t_stack *a, t_stack *b)
+void	op_rrr(t_data *data, int print)
 {
-	reverse_rotate(a);
-	reverse_rotate(b);
-	write(1, "rrr\n", 4);
+	reverse_rotate(data->a);
+	reverse_rotate(data->b);
+	if (print)
+		write(1, "rrr\n", 4);
+	data->bench.rrr++;
+	data->bench.total++;
 }

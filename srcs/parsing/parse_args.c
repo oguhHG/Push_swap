@@ -3,65 +3,90 @@
 /*                                                        :::      ::::::::   */
 /*   parse_args.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: colassin <colassin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hgrandje <hgrandje@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/21 10:19:25 by colassin          #+#    #+#             */
-/*   Updated: 2026/01/21 11:00:23 by colassin         ###   ########.fr       */
+/*   Created: 2026/01/21 15:12:19 by hgrandje          #+#    #+#             */
+/*   Updated: 2026/01/21 15:55:27 by hgrandje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/push_swap.h"
+#include "push_swap.h"
 
-static int	parse_string(char *str, t_stack *a)
+static int	count_numbers(int argc)
 {
-	char	**split;
+	return (argc - 1);
+}
+
+static int	*create_array(char **argv, int argc, int *size)
+{
+	int		*arr;
 	int		i;
+	long	num;
 
-	split = ft_split(str, ' ');
-	if (!split)
-		return (0);
+	*size = count_numbers(argc);
+	arr = malloc(sizeof(int) * (*size));
+	if (!arr)
+		return (NULL);
 	i = 0;
-	while (split[i])
+	while (i < *size)
 	{
-		if (!add_number(a, split[i]))
+		num = ft_atol(argv[i + 1]);
+		if (num > INT_MAX || num < INT_MIN)
 		{
-			free_split(split);
-			return (0);
+			free(arr);
+			return (NULL);
 		}
+		arr[i] = (int)num;
 		i++;
 	}
-	free_split(split);
-	return (1);
+	return (arr);
 }
 
-static int	parse_numbers(int ac, char **av, t_stack *a, int start)
+static int	fill_stack(t_data *data, int *arr, int size)
 {
-	int	i;
+	int		i;
+	t_node	*node;
 
-	if (ac - start == 1 && !is_flag(av[start]))
-		return (parse_string(av[start], a));
-	i = start;
-	while (i < ac)
+	i = size - 1;
+	while (i >= 0)
 	{
-		if (!add_number(a, av[i]))
+		node = node_new(arr[i]);
+		if (!node)
 			return (0);
-		i++;
+		stack_push(data->a, node);
+		i--;
 	}
 	return (1);
 }
 
-int	parse_args(int ac, char **av, t_stack *a, t_data *data)
+int	parse_args(t_data *data, int argc, char **argv)
 {
-	if (ac < 2)
+	int	*arr;
+	int	size;
+
+	if (!validate_input(argv, argc))
 		return (0);
-	if (!parse_flags(ac, av, data))
+	arr = create_array(argv, argc, &size);
+	if (!arr)
 		return (0);
-	if (data->start_index >= ac)
+	if (has_duplicates(arr, size))
+	{
+		free(arr);
 		return (0);
-	if (!parse_numbers(ac, av, a, data->start_index))
+	}
+	data->a = stack_init();
+	data->b = stack_init();
+	if (!data->a || !data->b)
+	{
+		free(arr);
 		return (0);
-	if (a->size == 0)
+	}
+	if (!fill_stack(data, arr, size))
+	{
+		free(arr);
 		return (0);
-	reverse_stack(a);
+	}
+	free(arr);
+	index_stack(data->a);
 	return (1);
 }
